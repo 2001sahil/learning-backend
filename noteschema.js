@@ -1,8 +1,14 @@
 const mongose=require("mongoose")
+
 const data=new mongose.Schema({
+    user:{
+        type:mongose.Schema.Types.ObjectId,
+        ref:"User",
+    },
     Name:{
-        type:String,
-        require:true
+
+        type:String
+
     },
     PhoneNo:{
         type:Number,
@@ -18,6 +24,6 @@ const data=new mongose.Schema({
         require:true
     }
 })
-const User = mongose.model("User", data);
+const User = mongose.model("Notes", data);
 
 module.exports=User
