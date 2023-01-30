@@ -27,13 +27,11 @@ router.get("/",
       email:req.body.email
      })
     
-    const data={
-      userid:{
-      id:newuser.id
-    }}
-    const auth=jwt.sign(data,sec)
-    // console.log(auth)
-
+    // const data={
+    //   userid:{
+    //   id:newuser.id
+    // }}
+    // const auth=jwt.sign(data,sec)
     newuser.save()
     res.send(newuser)
 })
@@ -44,7 +42,7 @@ router.post("/login",async (req,res)=>{
     //     return res.status(400).send("Unknown error");
     //   }
     try{
-      const {Name,password,Email}= await req.body;
+      const [Name,password,Email]= await [req.body.Name,req.body.password,req.body.email];
       console.log(Name,password,req.body.email)
       const query=await user.findOne({email:req.body.email})
       if(!query){
@@ -60,16 +58,15 @@ router.post("/login",async (req,res)=>{
           id:query.id
         }}
       const auth= await jwt.sign(data,sec)
-      // console.log("OKKKK")
       res.send({auth})
 
     }
     catch(err){res.send(err)}
 })
 router.post("/getuser",fetuser,async (req,res)=>{
-  console.log(req.id)
+  // console.log(req.id)
   const data=await user.findOne({_id:(req.id)})
-  // console.log(data)
+  // console.log(data.id)
   res.send(data)
 
 })

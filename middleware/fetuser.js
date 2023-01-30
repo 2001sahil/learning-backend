@@ -10,7 +10,6 @@ const fetuser=(req,res,next)=>{
         return res.send("Token not matched")
     }
     // console.log(com)
-    // console.log(com.query.id)
     req.id=com.query.id
     next()
 }

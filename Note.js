@@ -18,9 +18,8 @@ router.post("/addnote",fetuser,async (req,res)=>{
         const {Name,PhoneNO,password}=req.body;
         console.log("ok")
         const data=new userschema({Name:Name,PhoneNo:PhoneNO,password:password,user:req.id})
-        // const Data=new userschema({user:req.id})
         data.save()
-        res.send("data added succesfully")        
+        res.send(data)        
     } catch (error) {
         console.log("error")      
         res.send("Here an unexpected error occured")        
@@ -45,15 +44,6 @@ router.get("/update:id",fetuser,async (req,res)=>{
         res.send("Here an unexpected error occured")        
     }
 })
-
-
-
-
-
-
-
-
-
 
 
 module.exports=router
