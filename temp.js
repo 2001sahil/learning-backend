@@ -7,16 +7,17 @@ const router=express.Router()
 const jwt = require('jsonwebtoken');
 const { fetuser } = require("./middleware/fetuser");
 const sec="navjanjdnavjnajnjv"
-router.get("/",
+router.post("/",
     body('Name').isString(),
     body('password').isLength({ min: 5 }),async (req,res)=>{
     const errors = validationResult(req);
+    sucess=false;
     if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array() });
+        return res.status(400).json({ sucess,errors: errors.array() });
       }
       let User=await user.findOne({Name:req.body.Name})
       if(User){
-        return res.send("Name are same")
+        return res.send({sucess,result:"Name are same"})
       }
       const salt=await bcrypt.genSalt(10)
       const src=await bcrypt.hash(req.body.password,salt)
@@ -26,49 +27,36 @@ router.get("/",
       password:src,
       email:req.body.email
      })
-    
-    // const data={
-    //   userid:{
-    //   id:newuser.id
-    // }}
-    // const auth=jwt.sign(data,sec)
     newuser.save()
-    res.send(newuser)
+    sucess=true;
+    res.send({sucess,reult:"New user created sucessfully"})
 })
 router.post("/login",async (req,res)=>{
-    // const errors = validationResult(req);
-    // // console.log("runned")
-    // if (!errors.isEmpty()) {
-    //     return res.status(400).send("Unknown error");
-    //   }
     try{
+      sucess=false;
       const [Name,password,Email]= await [req.body.Name,req.body.password,req.body.email];
       console.log(Name,password,req.body.email)
       const query=await user.findOne({email:req.body.email})
       if(!query){
-        return res.send("wrong email")
+        return res.send({sucess,result:"wrong email"})
       }
       const comp=await bcrypt.compare(password,query.password)
       if(!comp){
-        return res.send("password doesn't matches")
+        return res.send({sucess,result:"password doesn't matches"})
       }
-      
       const data={
         query:{
           id:query.id
         }}
+      sucess=true;
       const auth= await jwt.sign(data,sec)
-      res.send({auth})
-
+      res.send({sucess,result:auth})
     }
-    catch(err){res.send(err)}
+    catch(err){res.send({sucess,result:err})}
 })
 router.post("/getuser",fetuser,async (req,res)=>{
-  // console.log(req.id)
   const data=await user.findOne({_id:(req.id)})
-  // console.log(data.id)
   res.send(data)
-
 })
 
 module.exports=router
