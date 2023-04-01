@@ -1,7 +1,6 @@
 const express=require("express")
 const userschema=require("./noteschema")
 const router=express.Router()
-// const router=express.Router()
 const { fetuser } = require("./middleware/fetuser");
 router.get("/getnote",fetuser,async (req,res)=>{
     try {

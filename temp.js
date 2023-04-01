@@ -1,8 +1,9 @@
 // try to update to see if this shown on github or not
 const express=require("express")
 const user=require("./schema")
+// var bodyParser = require('body-parser')
 const { body, validationResult } = require('express-validator');
-const {MongoClient} = require('mongodb');
+// const {MongoClient} = require('mongodb');
 const bcrypt = require('bcryptjs');
 const router=express.Router()
 const jwt = require('jsonwebtoken');
@@ -59,5 +60,4 @@ router.post("/getuser",fetuser,async (req,res)=>{
   const data=await user.findOne({_id:(req.id)})
   res.send(data)
 })
-
 module.exports=router
